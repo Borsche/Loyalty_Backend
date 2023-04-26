@@ -25,7 +25,7 @@ function getUserInfo(req, res) {
             username: response.data.preferred_username,
             picture: response.data.picture,
             points: 0,
-            role: 'USER'
+            role: 'OWNER'
         };
         res.send(userInfo);
     });

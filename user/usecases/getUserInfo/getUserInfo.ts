@@ -15,7 +15,7 @@ async function getUserInfo(req: Request, res: Response) {
         username: response.data.preferred_username,
         picture: response.data.picture,
         points: 0,
-        role: 'USER'
+        role: 'OWNER'
     }
 
     res.send(userInfo)

@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const createCommand_1 = __importDefault(require("./command/usecases/createCommand/createCommand"));
 const getCommands_1 = __importDefault(require("./command/usecases/getCommands/getCommands"));
 const updateCommand_1 = __importDefault(require("./command/usecases/updateCommand/updateCommand"));
+const deleteCommand_1 = __importDefault(require("./command/usecases/deleteCommand/deleteCommand"));
 const getUserInfo_1 = __importDefault(require("./user/usecases/getUserInfo/getUserInfo"));
 const validateToken_1 = __importDefault(require("./user/usecases/validate/validateToken"));
 const say_1 = __importDefault(require("say"));
@@ -24,6 +25,7 @@ console.log(say_1.default.getInstalledVoices(err => { if (err)
 app.get('/api/command/commands', getCommands_1.default);
 app.post('/api/command/create', createCommand_1.default);
 app.put('/api/command/update', updateCommand_1.default);
+app.post('/api/command/delete', deleteCommand_1.default);
 app.get('/api/user/', getUserInfo_1.default);
 app.get('/api/user/validate', validateToken_1.default);
 app.listen(port, () => {

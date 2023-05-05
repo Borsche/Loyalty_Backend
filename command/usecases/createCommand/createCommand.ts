@@ -12,11 +12,11 @@ async function createCommand(req: Request, res: Response) {
 
     const command = req.body
 
-    await db.commands.create({
+    const response = await db.commands.create({
         data: command
     })
 
-    res.send()
+    res.send(response)
 }
 
 export default createCommand

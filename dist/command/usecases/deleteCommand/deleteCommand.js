@@ -14,18 +14,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../../../clients/db"));
 const validator_1 = __importDefault(require("../../../clients/validator"));
-function createCommand(req, res) {
+function deleteCommand(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.headers.token;
         const isOwner = yield validator_1.default.isOwner(token);
         if (!isOwner) {
             res.status(401).end("You can't do that.");
         }
-        const command = req.body;
-        const response = yield db_1.default.commands.create({
-            data: command
-        });
-        res.send(response);
+        const { id } = req.body;
+        try {
+            yield db_1.default.commands.delete({
+                where: {
+                    id: id,
+                }
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+        res.send();
     });
 }
-exports.default = createCommand;
+exports.default = deleteCommand;

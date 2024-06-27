@@ -8,6 +8,7 @@
     "generate db client": "npx prisma generate",
     "start": "npx tsc && node dist/main.js",
     "pulldb": "prisma db pull",
+    "pushdb": "prisma db push",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/main.js\""
   },
   "keywords": [],

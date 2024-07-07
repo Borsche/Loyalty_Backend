@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const chatbot_1 = __importDefault(require("./clients/chatbot"));
 const createCommand_1 = __importDefault(require("./command/usecases/createCommand/createCommand"));
 const getCommands_1 = __importDefault(require("./command/usecases/getCommands/getCommands"));
 const updateCommand_1 = __importDefault(require("./command/usecases/updateCommand/updateCommand"));
@@ -22,6 +23,7 @@ if (!port) {
 // say.speak("Dies ist ein Test")
 console.log(say_1.default.getInstalledVoices(err => { if (err)
     console.log(err); }));
+chatbot_1.default.create();
 // command API
 app.get('/api/command/commands', getCommands_1.default);
 app.post('/api/command/create', createCommand_1.default);

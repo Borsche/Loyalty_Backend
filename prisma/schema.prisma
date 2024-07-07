@@ -54,10 +54,9 @@ model usernames {
 }
 
 model watchers {
-  id     Int      @id @default(autoincrement())
-  active Boolean?
-  name   String   @db.VarChar(255)
-  points Int?
+  name   String   @id @db.VarChar(255)
+  active Boolean  @default(false)
+  points Int      @default(0)
 }
 
 

@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model commands {
+model Command {
   id           Int     @id @default(autoincrement())
   cooldown     Int?
   cost         Int?
@@ -16,47 +16,47 @@ model commands {
   name         String  @db.VarChar(255)
   title        String  @db.VarChar(255)
   uses         Int?
-  access_scope String? @db.VarChar(255)
+  accessScope String? @db.VarChar(255)
+  usedCommands UsedCommand[]
 }
 
-model event {
+model Event {
   id             Int       @id @default(autoincrement())
   active         Boolean
-  amount_relativ Boolean
+  amountRelativ Boolean
   cooldown       Int?
   description    String    @db.VarChar(255)
-  los_amount     Int
-  los_chance     Int?
-  max_set_amount Int?
-  min_set_amount Int?
+  lossAmount     Int
+  lossChance     Int?
+  maxSetAmount Int?
+  minSetAmount Int?
   name           String    @db.VarChar(255)
-  used_at        DateTime? @db.Timestamp(6)
-  win_amount     Int
-  win_chance     Int
+  usedAt        DateTime? @db.Timestamp(6)
+  winAmount     Int
+  winChance     Int
 }
 
-model eventmessage {
+model Eventmessage {
   id        Int     @id @default(autoincrement())
   start_msg String? @db.VarChar(255)
 }
 
-model user_command {
-  command_id Int
-  user_id    Int
-  used_at    DateTime? @db.Timestamp(6)
+model UsedCommand {
+  command Command @relation(fields: [commandId], references: [id])
+  commandId Int
+  user User @relation(fields: [userId], references: [id])
+  userId    Int
+  usedAt    DateTime? @db.Timestamp(6)
 
-  @@id([command_id, user_id])
+  @@id([userId, commandId])
 }
 
-model usernames {
-  id       Int     @id @default(autoincrement())
-  username String? @db.VarChar(255)
-}
-
-model watchers {
-  name   String   @id @db.VarChar(255)
-  active Boolean  @default(false)
-  points Int      @default(0)
+model User {
+  id Int @id @default(autoincrement())
+  username String @db.VarChar(255)
+  active Boolean @default(false)
+  points Int @default(0)
+  usedCommands UsedCommand[]
 }
 
 
@@ -66,7 +66,7 @@ enum Reward {
   SCRATCH
 }
 
-model dailys {
+model Daily {
   id    Int       @id @default(autoincrement())
   date  DateTime  @unique
   reward Reward   @default(POINTS)

@@ -10,6 +10,7 @@ const updateCommand_1 = __importDefault(require("./command/usecases/updateComman
 const deleteCommand_1 = __importDefault(require("./command/usecases/deleteCommand/deleteCommand"));
 const getUserInfo_1 = __importDefault(require("./user/usecases/getUserInfo/getUserInfo"));
 const validateToken_1 = __importDefault(require("./user/usecases/validate/validateToken"));
+const getDaily_1 = __importDefault(require("./reward/daily/getDaily/getDaily"));
 const say_1 = __importDefault(require("say"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -28,6 +29,7 @@ app.put('/api/command/update', updateCommand_1.default);
 app.post('/api/command/delete', deleteCommand_1.default);
 app.get('/api/user/', getUserInfo_1.default);
 app.get('/api/user/validate', validateToken_1.default);
+app.get('/api/reward/getDaily', getDaily_1.default);
 app.listen(port, () => {
     console.log("App started");
 });

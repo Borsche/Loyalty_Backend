@@ -12,21 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
-function validateToken(req, res) {
+const db_1 = __importDefault(require("../../../clients/db"));
+const validator_1 = __importDefault(require("../../../clients/validator"));
+function getDaily(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.headers.token;
-        const headers = {
-            Authorization: "Bearer " + token,
-            ContentType: "application/json",
-        };
-        try {
-            const response = yield axios_1.default.get("https://id.twitch.tv/oauth2/validate", { headers });
-            res.send('ok');
+        if ((yield validator_1.default.getTokenOwner(token)) == '') {
+            res.status(401).end("You can't do that.");
+            return;
         }
-        catch (_a) {
-            res.sendStatus(400);
-        }
+        let minimumDate = new Date();
+        minimumDate.setDate(minimumDate.getDate() - 3);
+        let maximumDate = new Date();
+        maximumDate.setDate(maximumDate.getDate() + 3);
+        const response = yield db_1.default.dailys.findMany({
+            where: {
+                date: {
+                    lte: new Date(maximumDate),
+                    gte: new Date(minimumDate)
+                }
+            },
+            orderBy: {
+                date: 'desc',
+            }
+        });
+        res.send(response);
     });
 }
-exports.default = validateToken;
+exports.default = getDaily;

@@ -10,8 +10,8 @@ async function validateToken(req: Request, res: Response) {
     };
 
     try {
-        await axios.get("https://id.twitch.tv/oauth2/validate", {headers})
-        res.send()
+        const response = await axios.get("https://id.twitch.tv/oauth2/validate", {headers})
+        res.send('ok');
     } catch {
         res.sendStatus(400)
     }

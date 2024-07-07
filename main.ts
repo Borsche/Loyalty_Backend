@@ -8,6 +8,8 @@ import deleteCommand from './command/usecases/deleteCommand/deleteCommand';
 import getUserInfo from './user/usecases/getUserInfo/getUserInfo';
 import validateToken from './user/usecases/validate/validateToken';
 
+import getDaily from './reward/daily/getDaily/getDaily';
+
 import say from 'say';
 
 const app: Express = express();
@@ -31,6 +33,8 @@ app.post('/api/command/delete', deleteCommand)
 
 app.get('/api/user/', getUserInfo)
 app.get('/api/user/validate', validateToken)
+
+app.get('/api/reward/getDaily', getDaily)
 
 app.listen(port, () => {
     console.log("App started")

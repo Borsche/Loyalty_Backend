@@ -59,3 +59,17 @@ model watchers {
   name   String   @db.VarChar(255)
   points Int?
 }
+
+
+enum Reward {
+  POINTS
+  SPIN
+  SCRATCH
+}
+
+model dailys {
+  id    Int       @id @default(autoincrement())
+  date  DateTime  @unique
+  reward Reward   @default(POINTS)
+  amount Int      @default(1)
+}

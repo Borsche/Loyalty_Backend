@@ -11,6 +11,7 @@ const updateCommand_1 = __importDefault(require("./command/usecases/updateComman
 const deleteCommand_1 = __importDefault(require("./command/usecases/deleteCommand/deleteCommand"));
 const getUserInfo_1 = __importDefault(require("./user/usecases/getUserInfo/getUserInfo"));
 const validateToken_1 = __importDefault(require("./user/usecases/validate/validateToken"));
+const addPoints_1 = __importDefault(require("./points/usecases/addPoints/addPoints"));
 const getDaily_1 = __importDefault(require("./reward/daily/getDaily/getDaily"));
 const say_1 = __importDefault(require("say"));
 const app = (0, express_1.default)();
@@ -24,6 +25,10 @@ if (!port) {
 console.log(say_1.default.getInstalledVoices(err => { if (err)
     console.log(err); }));
 chatbot_1.default.create();
+// add points interval
+setInterval(() => {
+    addPoints_1.default.addPointsMany(Array.from(chatbot_1.default.joinedUsernames), process.env.POINTSAMOUNT ? parseInt(process.env.POINTSAMOUNT) : 50);
+}, process.env.POINTSINTERVAL ? parseInt(process.env.POINTSINTERVAL) : 5000 * 60);
 // command API
 app.get('/api/command/commands', getCommands_1.default);
 app.post('/api/command/create', createCommand_1.default);

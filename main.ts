@@ -10,6 +10,8 @@ import deleteCommand from './command/usecases/deleteCommand/deleteCommand';
 import getUserInfo from './user/usecases/getUserInfo/getUserInfo';
 import validateToken from './user/usecases/validate/validateToken';
 
+import addPoints from './points/usecases/addPoints/addPoints';
+
 import getDaily from './reward/daily/getDaily/getDaily';
 
 import say from 'say';
@@ -28,6 +30,10 @@ console.log(say.getInstalledVoices(err => {if (err)console.log(err)}))
 
 chatbot.create();
 
+// add points interval
+setInterval(() => {
+    addPoints.addPointsMany(Array.from(chatbot.joinedUsernames), process.env.POINTSAMOUNT ? parseInt(process.env.POINTSAMOUNT) : 50);
+}, process.env.POINTSINTERVAL ? parseInt(process.env.POINTSINTERVAL) : 5000 * 60);
 
 // command API
 app.get('/api/command/commands', getCommands)

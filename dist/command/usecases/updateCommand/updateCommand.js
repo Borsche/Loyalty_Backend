@@ -23,7 +23,7 @@ function updateCommand(req, res) {
         }
         const command = req.body;
         try {
-            yield db_1.default.commands.update({
+            yield db_1.default.command.update({
                 where: {
                     id: command.id,
                 },

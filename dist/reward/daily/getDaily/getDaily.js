@@ -25,7 +25,7 @@ function getDaily(req, res) {
         minimumDate.setDate(minimumDate.getDate() - 3);
         let maximumDate = new Date();
         maximumDate.setDate(maximumDate.getDate() + 3);
-        const response = yield db_1.default.dailys.findMany({
+        const response = yield db_1.default.daily.findMany({
             where: {
                 date: {
                     lte: new Date(maximumDate),

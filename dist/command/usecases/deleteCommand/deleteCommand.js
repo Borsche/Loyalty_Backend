@@ -23,7 +23,7 @@ function deleteCommand(req, res) {
         }
         const { id } = req.body;
         try {
-            yield db_1.default.commands.delete({
+            yield db_1.default.command.delete({
                 where: {
                     id: id,
                 }

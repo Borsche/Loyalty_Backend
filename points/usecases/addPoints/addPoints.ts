@@ -11,21 +11,36 @@ async function handleAddPoints(req: Request, res: Response)  {
 }
 
 function addPoints(username: string, points: number) {
-    db.watchers.update({
-        where: { name: username },
-        data: {
-            points: {
-                increment: points
-            }
-        }
-    })
+    const usernames = [username];
+    addPointsMany(usernames, points);
 }
 
-function addPointsMany(username: string[], points: number) {
+function addPointsMany(usernames: string[], points: number) {
+    const usernamesToAdd = usernames.map(username => ({ username }));
 
+    db.$transaction([
+        db.user.createMany({
+            skipDuplicates: true,
+            data: usernamesToAdd
+        }),
+
+        db.user.updateMany({
+            where: { 
+                username: {
+                    in: usernames
+                }
+            },
+            data: {
+                points: {
+                    increment: points
+                }
+            }
+        })
+    ]);
 }
 
 export default { 
     handleAddPoints,
-    addPoints
+    addPoints,
+    addPointsMany,
 }

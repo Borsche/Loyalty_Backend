@@ -8,20 +8,19 @@ async function getCommands(req: Request, res: Response)  {
     let commands;
 
     if(await validator.isOwner(token)) {
-        commands = await db.commands.findMany()         
+        commands = await db.command.findMany()         
     } else if(await validator.isMod(token)) {
-        commands = await db.commands.findMany({
+        commands = await db.command.findMany({
             where: {
-                access_scope: 'ALL',
-                OR: {
-                    access_scope: 'MOD'
+                accessScope: {
+                    in: ['ALL', 'MOD']
                 }
             }
         })
     } else {
-        commands = await db.commands.findMany({
+        commands = await db.command.findMany({
             where: {
-                access_scope: 'ALL',
+                accessScope: 'ALL',
             }
         })
     }

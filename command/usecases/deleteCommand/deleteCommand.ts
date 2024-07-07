@@ -13,7 +13,7 @@ async function deleteCommand(req: Request, res: Response) {
     const { id } = req.body
 
     try {
-        await db.commands.delete({
+        await db.command.delete({
             where: {
                 id: id,
             }

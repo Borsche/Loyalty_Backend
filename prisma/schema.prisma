@@ -53,7 +53,7 @@ model UsedCommand {
 
 model User {
   id Int @id @default(autoincrement())
-  username String @db.VarChar(255)
+  username String @unique @db.VarChar(255)
   active Boolean @default(false)
   points Int @default(0)
   usedCommands UsedCommand[]

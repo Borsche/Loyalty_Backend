@@ -23,18 +23,32 @@ function handleAddPoints(req, res) {
     });
 }
 function addPoints(username, points) {
-    db_1.default.watchers.update({
-        where: { name: username },
-        data: {
-            points: {
-                increment: points
-            }
-        }
-    });
+    const usernames = [username];
+    addPointsMany(usernames, points);
 }
-function addPointsMany(username, points) {
+function addPointsMany(usernames, points) {
+    const usernamesToAdd = usernames.map(username => ({ username }));
+    db_1.default.$transaction([
+        db_1.default.user.createMany({
+            skipDuplicates: true,
+            data: usernamesToAdd
+        }),
+        db_1.default.user.updateMany({
+            where: {
+                username: {
+                    in: usernames
+                }
+            },
+            data: {
+                points: {
+                    increment: points
+                }
+            }
+        })
+    ]);
 }
 exports.default = {
     handleAddPoints,
-    addPoints
+    addPoints,
+    addPointsMany,
 };

@@ -1,4 +1,7 @@
 import tmi from 'tmi.js';
+import db from './db';
+
+const joinedUsernames: Set<string> = new Set();
 
 function create(): tmi.Client {
     const client = new tmi.Client({
@@ -7,12 +10,15 @@ function create(): tmi.Client {
     
     client.connect();
     
-    client.on('join', (channel, username, self) => {
+    client.on('join', async (channel, username, self) => {
         if(self || username.startsWith('justinfan')) // disable for bot and anonymous users
             return;
 
         // set user active
-        console.log(channel, username, self);
+        // console.log(channel, username, self);
+        if(!joinedUsernames.has(username)) {
+            joinedUsernames.add(username);
+        }
     })
     
     client.on('part', (channel, username, self) => {
@@ -20,12 +26,15 @@ function create(): tmi.Client {
             return;
 
         // set user inactive
-        console.log(channel, username, self);
+        if(!joinedUsernames.has(username)) {
+            joinedUsernames.delete(username);
+        }
     })
 
     return client;
 } 
 
 export default {
-    create
+    create,
+    joinedUsernames
 } 

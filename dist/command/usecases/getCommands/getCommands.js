@@ -19,22 +19,21 @@ function getCommands(req, res) {
         const token = req.headers.token;
         let commands;
         if (yield validator_1.default.isOwner(token)) {
-            commands = yield db_1.default.commands.findMany();
+            commands = yield db_1.default.command.findMany();
         }
         else if (yield validator_1.default.isMod(token)) {
-            commands = yield db_1.default.commands.findMany({
+            commands = yield db_1.default.command.findMany({
                 where: {
-                    access_scope: 'ALL',
-                    OR: {
-                        access_scope: 'MOD'
+                    accessScope: {
+                        in: ['ALL', 'MOD']
                     }
                 }
             });
         }
         else {
-            commands = yield db_1.default.commands.findMany({
+            commands = yield db_1.default.command.findMany({
                 where: {
-                    access_scope: 'ALL',
+                    accessScope: 'ALL',
                 }
             });
         }

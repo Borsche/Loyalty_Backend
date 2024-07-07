@@ -13,7 +13,7 @@ async function updateCommand(req: Request, res: Response) {
     const command = req.body
 
     try {
-        await db.commands.update({
+        await db.command.update({
             where: {
                 id: command.id,
             },

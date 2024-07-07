@@ -22,7 +22,7 @@ function createCommand(req, res) {
             res.status(401).end("You can't do that.");
         }
         const command = req.body;
-        const response = yield db_1.default.commands.create({
+        const response = yield db_1.default.command.create({
             data: command
         });
         res.send(response);

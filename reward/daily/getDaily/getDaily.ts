@@ -16,7 +16,7 @@ async function getDaily(req: Request, res: Response) {
     let maximumDate = new Date();
     maximumDate.setDate(maximumDate.getDate() + 3);
 
-    const response = await db.dailys.findMany({
+    const response = await db.daily.findMany({
         where: {
             date: {
                 lte: new Date(maximumDate),

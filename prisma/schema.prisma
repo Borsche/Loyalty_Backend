@@ -51,11 +51,18 @@ model UsedCommand {
   @@id([userId, commandId])
 }
 
+enum Role {
+  OWNER
+  MOD
+  USER
+}
+
 model User {
   id Int @id @default(autoincrement())
   username String @unique @db.VarChar(255)
   active Boolean @default(false)
   points Int @default(0)
+  role Role @default(USER)
   usedCommands UsedCommand[]
 }
 

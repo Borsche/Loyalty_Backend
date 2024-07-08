@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import UserInfo from './UserInfo';
 import axios from 'axios';
+import db from '../../../clients/db';
+import { Role } from '@prisma/client';
 
 async function getUserInfo(req: Request, res: Response) {
     const token = req.headers.token as string
@@ -11,14 +13,26 @@ async function getUserInfo(req: Request, res: Response) {
     };
 
     const response = (await axios.get("https://id.twitch.tv/oauth2/userinfo", {headers}))
+    const data = await response.data;
     const userInfo: UserInfo = {
-        username: response.data.preferred_username,
-        picture: response.data.picture,
+        username: data.preferred_username,
+        picture: data.picture,
         points: 0,
-        role: 'OWNER'
+        role: Role.USER
     }
 
-    res.send(userInfo)
+
+    const user = await db.user.findUnique({
+        where: {
+            username: userInfo.username.toLocaleLowerCase(),
+        },
+        select: {
+            points: true,
+            role: true,
+        }
+    });
+
+    res.send({ ...userInfo, ...user })
 }
 
 export default getUserInfo

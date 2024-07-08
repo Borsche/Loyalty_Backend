@@ -32,7 +32,7 @@ function create() {
         if (self || username.startsWith('justinfan'))
             return;
         // set user inactive
-        if (!joinedUsernames.has(username)) {
+        if (joinedUsernames.has(username)) {
             joinedUsernames.delete(username);
         }
     });

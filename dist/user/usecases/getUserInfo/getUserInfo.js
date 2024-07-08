@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
+const db_1 = __importDefault(require("../../../clients/db"));
+const client_1 = require("@prisma/client");
 function getUserInfo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.headers.token;
@@ -21,13 +23,23 @@ function getUserInfo(req, res) {
             ContentType: "application/json",
         };
         const response = (yield axios_1.default.get("https://id.twitch.tv/oauth2/userinfo", { headers }));
+        const data = yield response.data;
         const userInfo = {
-            username: response.data.preferred_username,
-            picture: response.data.picture,
+            username: data.preferred_username,
+            picture: data.picture,
             points: 0,
-            role: 'OWNER'
+            role: client_1.Role.USER
         };
-        res.send(userInfo);
+        const user = yield db_1.default.user.findUnique({
+            where: {
+                username: userInfo.username.toLocaleLowerCase(),
+            },
+            select: {
+                points: true,
+                role: true,
+            }
+        });
+        res.send(Object.assign(Object.assign({}, userInfo), user));
     });
 }
 exports.default = getUserInfo;

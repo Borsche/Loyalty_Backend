@@ -23,10 +23,10 @@ function create(): tmi.Client {
     
     client.on('part', (channel, username, self) => {
         if(self || username.startsWith('justinfan'))
-            return;
+            return; 
 
         // set user inactive
-        if(!joinedUsernames.has(username)) {
+        if(joinedUsernames.has(username)) {
             joinedUsernames.delete(username);
         }
     })

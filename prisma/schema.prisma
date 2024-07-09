@@ -64,6 +64,7 @@ id            Int             @id @default(autoincrement())
   points      Int             @default(0)
   role        Role            @default(USER)
   usedCommands UsedCommand[]
+  dailys      Daily[]
 }
 
 
@@ -74,8 +75,8 @@ enum Reward {
 }
 
 model Daily {
-  id      Int       @id @default(autoincrement())
-  date    DateTime  @unique
+  date    DateTime  @id
   reward  Reward    @default(POINTS)
   amount  Int       @default(1)
+  users   User[]    
 }

@@ -1,32 +1,33 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import db from '../../../clients/db';
 import validator from '../../../clients/validator';
+import { getWeekDatesNormalize } from '../helpers/helpers';
 
 async function getDaily(req: Request, res: Response) {
     const token = req.headers.token as string
 
-    if(await validator.getTokenOwner(token) == '') { 
+    const username = await validator.getTokenOwner(token);
+    if(username == '') { 
         res.status(401).end("You can't do that.");
         return;
     }
 
-    let minimumDate = new Date(); 
-    minimumDate.setDate(minimumDate.getDate() - 3);
-
-    let maximumDate = new Date();
-    maximumDate.setDate(maximumDate.getDate() + 3);
+    const dates = getWeekDatesNormalize();
 
     const response = await db.daily.findMany({
         where: {
             date: {
-                lte: new Date(maximumDate),
-                gte: new Date(minimumDate)
-            }
+                in: dates
+            },
         },
-        orderBy: {
-            date: 'desc',
+        include: {
+            users: {
+                where: {
+                    username: username.toLowerCase()
+                }
+            }
         }
-    });
+    })
 
     res.send(response)
 }

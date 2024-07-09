@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../../../clients/db"));
 const validator_1 = __importDefault(require("../../../clients/validator"));
 const helpers_1 = require("../helpers/helpers");
-function getDaily(req, res) {
+function claimDaily(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = req.headers.token;
         const username = yield validator_1.default.getTokenOwner(token);
@@ -23,17 +23,16 @@ function getDaily(req, res) {
             res.status(401).end("You can't do that.");
             return;
         }
-        const dates = (0, helpers_1.getWeekDatesNormalize)();
-        const response = yield db_1.default.daily.findMany({
+        const todayNormalize = (0, helpers_1.getDMYDate)(new Date());
+        // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations#implicit-many-to-many-relations
+        const response = yield db_1.default.user.update({
             where: {
-                date: {
-                    in: dates
-                },
+                username: username.toLowerCase()
             },
-            include: {
-                users: {
-                    where: {
-                        username: username.toLowerCase()
+            data: {
+                dailys: {
+                    connect: {
+                        date: todayNormalize
                     }
                 }
             }
@@ -41,4 +40,4 @@ function getDaily(req, res) {
         res.send(response);
     });
 }
-exports.default = getDaily;
+exports.default = claimDaily;
